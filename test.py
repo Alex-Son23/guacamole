@@ -1,6 +1,7 @@
 import urllib.parse
 import json
 import time
+import httpx
 # Исходная строка
 encoded_str = "user=%7B%22id%22%3A7493728124%2C%22first_name%22%3A%22darvin%22%2C%22last_name%22%3A%22tink%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%7D&chat_instance=3051893017577474126&chat_type=private&start_param=ref_vbaxovVKQr&auth_date=1718050772&hash=54935857deb179557aabc58805fd2df0f0c6210af8084ff0bf87c08b67b90068"
 
@@ -49,3 +50,19 @@ with open("data.json", "r") as f:
         all_accs = json.load(f)
 
 print(all_accs)
+
+# http://pbomsduk:t3flfdg7jrxi@104.239.86.231:6141
+# print(httpx.Client(proxy="http://pbomsduk:t3flfdg7jrxi@104.239.86.231:6141").post("https://gateway.blum.codes/v1/user/username/check", content=json.dumps({"username": "wearyLion9"}), headers={'accept': 'application/json, text/plain, */*',
+#  'accept-encoding': 'gzip, deflate, br',
+#  'accept-language': 'en-GB,en;q=0.9',
+#  'content-type': 'application/json',
+#  'origin': 'https://telegram.blum.codes',
+#  'sec-fetch-dest': 'empty',
+#  'sec-fetch-mode': 'cors',
+#  'sec-fetch-site': 'same-site',
+#  'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0_3 like Mac OS X) '
+#                'AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 '
+#                'Mobile/15E148 Safari/604.1 OPX/2.2.0'}))
+
+
+print(httpx.Client(proxy="http://pbomsduk:t3flfdg7jrxi@104.239.86.231:6141").get("https://pypi.org", ))

@@ -82,7 +82,6 @@ class Proxy:
 
 class Profile:
     proxy: Proxy
-    headers: dict
     phone: str
     client: httpx.Client
     user_agent: str
@@ -103,6 +102,7 @@ class Profile:
     def __init__(self, phone: str, proxy_data: dict, query: str, username: str, user_agent: str = "") -> None:
         self.proxy = Proxy(proxy_data)
         self.phone = phone
+        print(str(self.proxy))
         self.client = httpx.Client(proxy=str(self.proxy))
         self.user_agent = user_agent
         self.headers["user-agent"] = self.user_agent
@@ -165,11 +165,13 @@ class RegisterService:
 
     def create_one(self, id: int):
         requester = self.profile_service.use_profile(id=id)
-        
+        print(requester.headers)
+        # time.sleep(4)
         if not self.check_username(requester, requester.username):
             new_username = generate_username()[0]
             while not self.check_username(requester, new_username):
                 new_username = generate_username()[0]
+                time.sleep(10)
         
         requester.username = new_username
         
@@ -179,12 +181,17 @@ class RegisterService:
             "referralToken": requester.referral_token
         }
         
-        resp = requester.client.post(AUTH_URL, headers=requester.headers, json=json.dumps(content))
-        return resp.status
+        resp = requester.client.post(AUTH_URL, headers=requester.headers, content=json.dumps(content))
+        print(resp)
+        print(resp.content)
+        return resp.status_code
     
     def check_username(self, profile: Profile, username: str):
-        resp = profile.client.post(url=CHECK, json=json.dumps({"username": username}), headers=profile.headers)
-        print(username, resp)
+        content = {"username": str(username)}
+        resp = profile.client.post(CHECK, content=json.dumps(content), headers=profile.headers)
+        print("______________________________")
+        print(username, json.dumps({"username": username}))
+        print(resp.status_code)
         return True if resp.status_code == 200 else False     
         
 
